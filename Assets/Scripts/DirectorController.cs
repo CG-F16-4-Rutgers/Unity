@@ -21,6 +21,8 @@ public class DirectorController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		//ResumePathing ();
+
 		RaycastHit hit;
 		Ray ray = camera.ScreenPointToRay (Input.mousePosition);
 
@@ -53,7 +55,7 @@ public class DirectorController : MonoBehaviour {
 			camera.gameObject.GetComponent<FreeLookCamera> ().canMove = false;			
 			float horizontal = Input.GetAxis ("Horizontal");
 			float vertical = Input.GetAxis ("Vertical");
-			obstacles[0].GetComponent<Rigidbody> ().AddForce (-pushForce * new Vector3 (horizontal, 0, vertical));
+			obstacles[0].GetComponent<Transform> ().Translate (-pushForce * new Vector3 (horizontal, 0, vertical) * Time.deltaTime);
 		} else {
 			camera.gameObject.GetComponent<FreeLookCamera> ().canMove = true;
 			ResetObstacles ();
@@ -81,4 +83,5 @@ public class DirectorController : MonoBehaviour {
 		}
 		agents.Clear ();
 	}
+
 }

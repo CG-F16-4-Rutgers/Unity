@@ -11,7 +11,7 @@ public class FreeLookCamera : MonoBehaviour
     float mainSpeed = 25.0f; //regular speed
     float shiftAdd = 10.0f; //multiplied by how long shift is held.  Basically running
     float maxShift = 50.0f; //Maximum speed when holdin gshift
-    float camSens = 0.2f; //How sensitive it with mouse
+    float camSens = 0.5f; //How sensitive it with mouse
 
     private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun = 1.0f;
@@ -21,7 +21,10 @@ public class FreeLookCamera : MonoBehaviour
         lastMouse = Input.mousePosition - lastMouse;
         lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
         lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x, transform.eulerAngles.y + lastMouse.y, 0);
-        transform.eulerAngles = lastMouse;
+        
+		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+			transform.eulerAngles = lastMouse;
+		}
         lastMouse = Input.mousePosition;
         //Mouse  camera angle done.  
 
