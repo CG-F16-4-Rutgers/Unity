@@ -5,11 +5,13 @@ public class FreeLookCamera : MonoBehaviour
 {
 	public float min_x, max_x; // Camera bound in x
 	public float min_z, max_z; // Camera bound in z
+	public bool canMove = true;
+
 
     float mainSpeed = 25.0f; //regular speed
     float shiftAdd = 10.0f; //multiplied by how long shift is held.  Basically running
     float maxShift = 50.0f; //Maximum speed when holdin gshift
-    float camSens = 0.1f; //How sensitive it with mouse
+    float camSens = 0.2f; //How sensitive it with mouse
 
     private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun = 1.0f;
@@ -44,11 +46,12 @@ public class FreeLookCamera : MonoBehaviour
         Vector3 newPosition = transform.position;
 
 		// Move in only x-y plane
-        transform.Translate(p);
-		newPosition.x = Mathf.Clamp (transform.position.x, min_x, max_x);
-		newPosition.z = Mathf.Clamp (transform.position.z, min_z, max_z);
-        transform.position = newPosition;
-
+		if (canMove) { 
+			transform.Translate (p);
+			newPosition.x = Mathf.Clamp (transform.position.x, min_x, max_x);
+			newPosition.z = Mathf.Clamp (transform.position.z, min_z, max_z);
+			transform.position = newPosition;
+		}
     }
 
     private Vector3 GetBaseInput()

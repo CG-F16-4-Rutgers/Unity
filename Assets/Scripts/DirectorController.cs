@@ -5,9 +5,12 @@ using System.Collections.Generic;
 public class DirectorController : MonoBehaviour {
 
 	public Camera camera;
+	public float pushForce; 
 
 	List<GameObject> obstacles = new List<GameObject> ();
 	List<GameObject> agents = new List<GameObject>();
+
+	private bool obstacleSelected = false;
 
 	// Use this for initialization
 	void Start () {
@@ -28,8 +31,12 @@ public class DirectorController : MonoBehaviour {
 					agents.Add (hit.collider.gameObject);    // Add selected agent to agents list
 					ResetObstacles (); 						 // Deselect all obstacles
 				} else if (hit.collider.gameObject.tag == "Obstacle") {
+					ResetObstacles ();
 					obstacles.Add (hit.collider.gameObject); // Add selected obstacles to obstacles list
+					hit.collider.gameObject.GetComponent<ObstacleController>().isSelected = true;
 					ResetAgents ();						     // Deselect all agents
+					camera.gameObject.GetComponent<FreeLookCamera>().canMove = false;
+					obstacleSelected = true;
 				} else {
 					foreach (GameObject go in agents) {
 						go.GetComponent<AgentController> ().target = hit.point;
@@ -41,6 +48,17 @@ public class DirectorController : MonoBehaviour {
 			ResetObstacles (); 
 			ResetAgents ();
 		}
+
+		if (obstacleSelected) {
+			camera.gameObject.GetComponent<FreeLookCamera> ().canMove = false;			
+			float horizontal = Input.GetAxis ("Horizontal");
+			float vertical = Input.GetAxis ("Vertical");
+			obstacles[0].GetComponent<Rigidbody> ().AddForce (-pushForce * new Vector3 (horizontal, 0, vertical));
+		} else {
+			camera.gameObject.GetComponent<FreeLookCamera> ().canMove = true;
+			ResetObstacles ();
+		}
+
 	}
 
 	void ResetObstacles()
@@ -49,6 +67,8 @@ public class DirectorController : MonoBehaviour {
 		{
 			go.GetComponent<ObstacleController> ().isSelected = false;
 		}
+		camera.gameObject.GetComponent<FreeLookCamera> ().canMove = true;
+		obstacleSelected = false;
 		obstacles.Clear ();
 	}
 
