@@ -3,35 +3,23 @@ using System.Collections;
 
 public class MovingObject : MonoBehaviour {
 
-	public Transform point1;
-	public Transform point2;
-	public float speed;
+	public float xOffset;			// distance to move cube from
 
-	private Rigidbody rb;
-	private bool reverse = false;
-	private Vector3 p1, p2;
+	private Vector3 point1; 		// Start point
+	private Vector3 point2;			// End point
 
-	void Start () {
-		rb = GetComponent<Rigidbody> ();
-		p1 = new Vector3 (point1.position.x, transform.position.y, transform.position.z);
-		p2 = new Vector3 (point2.position.x, transform.position.y, transform.position.z);
+	public float speed;				// Movement speed
+
+	void Start() 
+	{
+		point1 = transform.position;
+		point2 = transform.position;
+		point2.x += xOffset;
+	}
+
+	void Update() 
+	{
+		transform.position = Vector3.Lerp (point1, point2, (Mathf.Sin (speed * Time.time) + 1.0f) / 2.0f);
 	}
 		
-	void Update () {
-		if (this.gameObject.transform.position.x > p2.x) {
-			reverse = true;
-		} else if (this.gameObject.transform.position.x < p1.x) {
-			reverse = false;
-		}
-
-		if (reverse) {
-			transform.Translate (-speed * Vector3.right * Time.deltaTime);
-		}
-		else { 
-			transform.Translate (speed * Vector3.right * Time.deltaTime);
-		}
-
-		transform.Rotate (new Vector3 (15, 30, 45) * Time.deltaTime);
-	}
-
 }
