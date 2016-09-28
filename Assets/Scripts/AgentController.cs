@@ -26,10 +26,10 @@ public class AgentController : MonoBehaviour {
 			this.GetComponent<Renderer> ().material.color = setColor;  // Change color back to original material color;
 		}					
 
-		if (target != null && this.isSelected)
+		if (target != null)
 			navMeshAgent.SetDestination (target);	
 
-		navMeshAgent.Resume ();
+		navMeshAgent.Resume ();		
 	}
 
 	void OnTriggerEnter(Collider other) 
