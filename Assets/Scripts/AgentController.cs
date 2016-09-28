@@ -32,10 +32,16 @@ public class AgentController : MonoBehaviour {
 		navMeshAgent.Resume ();		
 	}
 
-	void OnTriggerEnter(Collider other) 
+	void OnTriggerStay(Collider other) 
 	{		
 		if (other.tag == "Player") {
-
+			AgentController otherControl = other.gameObject.GetComponent<AgentController> ();
+			if (otherControl.agentNumber < this.agentNumber) {				
+				if ((Mathf.Approximately (otherControl.target.x, this.target.x) && (Mathf.Approximately (otherControl.target.z, this.target.z)))) { 
+					navMeshAgent.Stop ();
+				}
+			}
 		}
 	}
+		
 }
