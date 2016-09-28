@@ -5,6 +5,7 @@ public class AgentController : MonoBehaviour {
 
 	public Vector3 target;
 	public bool isSelected;
+	public int agentNumber;
 
 	private Rigidbody rigidbody;
 	private NavMeshAgent navMeshAgent;
@@ -27,6 +28,14 @@ public class AgentController : MonoBehaviour {
 
 		if (target != null && this.isSelected)
 			navMeshAgent.SetDestination (target);	
-		
+
+		navMeshAgent.Resume ();
+	}
+
+	void OnTriggerEnter(Collider other) 
+	{		
+		if (other.tag == "Player") {
+
+		}
 	}
 }

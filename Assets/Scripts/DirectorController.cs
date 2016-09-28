@@ -63,6 +63,13 @@ public class DirectorController : MonoBehaviour {
 
 	}
 
+	void ResumeAgents() 
+	{
+		foreach (GameObject go in agents) {
+			go.GetComponent<NavMeshAgent> ().Resume ();
+		}
+	}
+
 	void ResetObstacles()
 	{
 		foreach (GameObject go in obstacles) 
