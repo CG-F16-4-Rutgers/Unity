@@ -36,6 +36,7 @@ public class DirectorController : MonoBehaviour {
 					ResetObstacles ();
 					obstacles.Add (hit.collider.gameObject); // Add selected obstacles to obstacles list
 					hit.collider.gameObject.GetComponent<ObstacleController>().isSelected = true;
+					ResumeAgents ();
 					ResetAgents ();						     // Deselect all agents
 					camera.gameObject.GetComponent<FreeLookCamera>().canMove = false;
 					obstacleSelected = true;
@@ -61,6 +62,7 @@ public class DirectorController : MonoBehaviour {
 			ResetObstacles ();
 		}
 
+		
 	}
 
 	void ResumeAgents() 
