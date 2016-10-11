@@ -22,10 +22,7 @@ public class CharacterController : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         Vector3 jump = new Vector3(0.0f, up, 0.0f);
 
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
-        {
-            rb.AddForce(movement * speed);
-        }
+        rb.AddForce(movement * speed);
 
         if (Input.GetKey("space") && rb.transform.position.y <= 0.0f)
         {

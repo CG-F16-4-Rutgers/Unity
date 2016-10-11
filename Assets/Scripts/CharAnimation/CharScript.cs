@@ -19,8 +19,10 @@ public class CharScript : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 
-        float move = Input.GetAxis("Vertical");
-        anim.SetFloat("Speed", move);
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+        anim.SetFloat("VelocityX", moveHorizontal);
+        anim.SetFloat("VelocityZ", moveVertical);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             anim.SetTrigger(jumpHash);
