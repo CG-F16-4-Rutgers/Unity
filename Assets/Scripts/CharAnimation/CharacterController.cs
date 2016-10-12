@@ -61,26 +61,30 @@ public class CharacterController : MonoBehaviour
 
 		switch (currentMode) {
 		case PlayerModes.Idle:
+			anim.SetBool ("isMoving", false);
 			currentSpeed = Mathf.Lerp (currentSpeed, 0.0f, 5.0f * Time.deltaTime);			
-			transform.RotateAround (transform.position, transform.up, horizontal * Time.deltaTime);
 			break;
 		
 		case PlayerModes.Moving: 
+			anim.SetBool ("isMoving", true);
 			currentSpeed = Mathf.Lerp (currentSpeed, maxSpeed, Time.deltaTime);
 			break;
 
 		case PlayerModes.Reverse:
+			anim.SetBool ("isMoving", true);
 			currentSpeed = Mathf.Lerp(currentSpeed, maxReverseSpeed, Time.deltaTime);
 			break;
 		}
+		transform.Rotate (0.0f, horizontal, 0.0f, Space.Self); 		// Rotate player
 
 		anim.SetFloat ("VelocityX", 5 * horizontal);
 		anim.SetFloat ("VelocityZ", currentSpeed);
 
 		transform.position += transform.forward * currentSpeed * Time.deltaTime;   					// Move forward-reverse
-		transform.position += transform.right * horizontal * Time.deltaTime;		// Move left-right
+		//transform.position += transform.right * horizontal * Time.deltaTime;						// Move left-right
 
-		if (Input.GetKeyDown (KeyCode.Space) && canJump) {
+		// Jump
+		if (Input.GetKeyDown (KeyCode.Space) && canJump) {											
 			canJump = false;
 			anim.SetBool ("Jump", true);
 			rb.AddForce (new Vector3 (0.0f, jumpForce, 0.0f));
@@ -90,7 +94,7 @@ public class CharacterController : MonoBehaviour
 			
 		
 	}
-
+	// Reset canJump
 	void OnCollisionEnter(Collision other) {
 		if (other.gameObject.tag == "Ground") { 
 			canJump = true;
