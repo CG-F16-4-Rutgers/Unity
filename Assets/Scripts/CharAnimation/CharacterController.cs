@@ -7,12 +7,13 @@ public class CharacterController : MonoBehaviour
 
 	enum PlayerModes { Idle, Moving, Reverse };
 
-    public float maxSpeed;
+	public float maxWalkSpeed;
+	public float maxRunSpeed;
 	public float maxReverseSpeed;
 	public float jumpForce;
-	public float incrementSpeed;
-	public float lookSpeed; 
+	public float delay;
 
+	private float maxSpeed;
     private Rigidbody rb;
 	private Animator anim;
 	private bool canJump = true;
@@ -23,6 +24,7 @@ public class CharacterController : MonoBehaviour
 
     void Start()
     {
+		maxSpeed = maxWalkSpeed;
 		currentMode = PlayerModes.Idle;
         rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator> ();
@@ -62,7 +64,7 @@ public class CharacterController : MonoBehaviour
 		switch (currentMode) {
 		case PlayerModes.Idle:
 			anim.SetBool ("isMoving", false);
-			currentSpeed = Mathf.Lerp (currentSpeed, 0.0f, 5.0f * Time.deltaTime);			
+			currentSpeed = Mathf.Lerp (currentSpeed, 0.0f, Time.deltaTime);
 			break;
 		
 		case PlayerModes.Moving: 
@@ -75,31 +77,43 @@ public class CharacterController : MonoBehaviour
 			currentSpeed = Mathf.Lerp(currentSpeed, maxReverseSpeed, Time.deltaTime);
 			break;
 		}
+
+		// Change to running if holding left shift
+		if (Input.GetKeyDown (KeyCode.LeftShift)) {
+			maxSpeed = maxRunSpeed;
+		} else if (Input.GetKeyUp(KeyCode.LeftShift)) {
+			maxSpeed = maxWalkSpeed;
+		}
+
+		if (horizontal != 0) {
+			anim.SetBool ("isTurning", true);
+		} else if (Mathf.Approximately (horizontal, 0.0f)) {
+			anim.SetBool ("isTurning", false);
+		}
+			
 		transform.Rotate (0.0f, horizontal, 0.0f, Space.Self); 		// Rotate player
 
-		anim.SetFloat ("VelocityX", 5 * horizontal);
+		anim.SetFloat ("VelocityX", horizontal);
 		anim.SetFloat ("VelocityZ", currentSpeed);
-
-		transform.position += transform.forward * currentSpeed * Time.deltaTime;   					// Move forward-reverse
-		//transform.position += transform.right * horizontal * Time.deltaTime;						// Move left-right
 
 		// Jump
 		if (Input.GetKeyDown (KeyCode.Space) && canJump) {											
 			canJump = false;
 			anim.SetBool ("Jump", true);
 			rb.AddForce (new Vector3 (0.0f, jumpForce, 0.0f));
-		} else if (!canJump) {
-			anim.SetBool ("Jump", false);
-		}
-			
+		}			
 		
 	}
 	// Reset canJump
-	void OnCollisionEnter(Collision other) {
+	void OnCollisionStay(Collision other) {		
+		anim.SetBool ("Jump", false);
 		if (other.gameObject.tag == "Ground") { 
 			canJump = true;
 		}
 	}
 		
+	IEnumerator Wait() {
+		yield return new WaitForSeconds (delay);
+	}
 }
 
