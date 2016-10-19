@@ -7,10 +7,9 @@ public class CameraController : MonoBehaviour {
 	public GameObject toFollow;
 
 	private Vector3 offset;
-	private float rotateY;
 
 	void Start () {
-		offset = transform.position - toFollow.transform.position;		
+		offset = transform.position - toFollow.transform.position;
 	}
 	
 	// Update is called once per frame
